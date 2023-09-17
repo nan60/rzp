@@ -1,0 +1,7 @@
+/target
+/.vscode
+*.zip
+*.rar
+*.tar
+*.tar.xz
+*.7z
