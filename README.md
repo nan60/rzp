@@ -1,7 +1,7 @@
 # rzp
 **Note: This was made as a high school final project and as a result, probably isn't very good**
 ### A command line archiver written in Rust
-Note: Due to the dependencies this project uses, It doesn't support Windows. 
+
 Features:
 - Blazing fast (over 3x as fast a p7zip and unzip)
 - Support for operating on multiple files at once
@@ -9,7 +9,6 @@ Features:
 - Support for the following compression formats: stored (i.e. none), deflate, bzip2, zstd (Thanks to [zip-rs](https://github.com/zip-rs/zip))
 - List file attributes
 - Simple syntax
-- Deletion support
 ---
 ## Usage
 <div>
@@ -34,17 +33,11 @@ Options:
   -v, --verbose          
   Be verbose
 
-  --remove           
-  Delete zip file after extraction
-
   -d, --directory        
   Extract each zip file into its own directory
 
   -H, --human-readable    
   Output bytes in human readable format
-
-  -q, --quiet   
-  Suppress output
 
   -h, --help             
   Print help
@@ -52,3 +45,6 @@ Options:
   -V, --version          
   Print version
 </div>
+
+## Building
+Use the windows build in the releases or install the rust toolchain and run `cargo build --release` in the project directory. It's best to then move the binary located in `./target/release/rzp` into `/usr/local/bin` (on *nix systems)

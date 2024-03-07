@@ -7,8 +7,6 @@ use std::{
 use owo_colors::OwoColorize;
 use zip::read::ZipFile;
 use super::util;
-use termion::terminal_size;
-use termion::clear::AfterCursor;
 
 pub fn list_zip_contents(reader: impl Read + Seek, file_path: &String, print_index: i32, human: bool) -> zip::result::ZipResult<()> {
     let mut zip = zip::ZipArchive::new(reader)?; // Open our zip file
@@ -113,9 +111,7 @@ pub fn extract_zip(reader: impl Read + Seek,
     output_dir: &String, force: bool, 
     verbose: bool, 
     file_path: &String, 
-    remove: bool, 
-    create_dir: bool,
-    quiet: bool) -> zip::result::ZipResult<()> {
+    create_dir: bool) -> zip::result::ZipResult<()> {
 
     let mut zip = zip::ZipArchive::new(reader)?;
     let zip_length = &mut zip.len(); 
@@ -157,40 +153,14 @@ pub fn extract_zip(reader: impl Read + Seek,
             else{
                 let mut outfile = BufWriter::new(File::create(&outpath)?); // Create new buffer
                 io::copy(&mut file, &mut outfile)?; // Copy file to its buffer (and actually write it)
-                if verbose { // More verbose output with '-v'
+                if verbose { // verbose output with '-v'
                     println!("{} -> {}", file.name().bright_blue().bold(), outpath.to_string_lossy().bright_blue().bold());
-                }
-                else if !quiet { // Don't output anything if using '-q'
-                    /* This is a hacky solution that keeps the output 
-                    on the same line and limits the output to the
-                    terminal size using the 'termion' library */
-                    let percentage = (i as f32 / *zip_length as f32) * 100.0;
-                    let (term_width, _) = terminal_size().unwrap();
-                    let max_width = term_width - 7; // 7 is the length of the percentage output
-                    let mut outname: String = file.name().to_string();
-                    outname.truncate(max_width as usize);
-                    print!("\r{:.2}{} {}", percentage.cyan(), "%".cyan(), outname);
-                    print!("{}", AfterCursor);
-                    io::stdout().flush()?;
                 }
             }
         }
     }
-    if !quiet{ // Don't output anything if using '-q'
-        if remove{ // Notify user that source .zip file was removed if '--remove' was specified
-            fs::remove_file(file_path)?;
-            print!("\r{} ({}); Deleted", "Everything Ok".cyan().bold(), file_path);
-        }
-        else{
-            print!("\r{} ({})", "Everything Ok".cyan().bold(), file_path);
-        }
-    }
-    
-    // Finish our hacky output
-    print!("{}", AfterCursor);
-    io::stdout().flush()?;
-    if !quiet{
-        println!();
+    if verbose{
+        print!("\r{} ({})", "Everything Ok".cyan().bold(), file_path);
     }
     Ok(())
 }

@@ -15,10 +15,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .arg(Arg::new("output").short('o').long("output").default_value("").hide_default_value(true).help("Output location"))
         .arg(Arg::new("force").short('f').long("force").action(ArgAction::SetTrue).help("Override existing files"))
         .arg(Arg::new("verbose").short('v').long("verbose").action(ArgAction::SetTrue).help("Be verbose"))
-        .arg(Arg::new("remove").long("remove").action(ArgAction::SetTrue).help("Delete zip file after extraction"))
         .arg(Arg::new("directory").short('d').long("directory").action(ArgAction::SetTrue).help("Extract each zip file into its own directory"))
         .arg(Arg::new("human_readable").short('H').long("human-readable").action(ArgAction::SetTrue).help("Output bytes in human readable format"))
-        .arg(Arg::new("quiet").short('q').long("quiet").action(ArgAction::SetTrue).help("Suppress output"))
         .get_matches();
 
     // Open files in a string of vecs (array size must be known at compile time in Rust, so we use vectors instead)
@@ -41,9 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             args.get_flag("force"), 
             args.get_flag("verbose"), 
             file[i], 
-            args.get_flag("remove"), 
-            args.get_flag("directory"),
-            args.get_flag("quiet"))?;
+            args.get_flag("directory"))?;
         }
     }
     Ok(())
