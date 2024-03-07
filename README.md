@@ -47,4 +47,4 @@ Options:
 </div>
 
 ## Building
-Use the windows build in the releases or install the rust toolchain and run `cargo build --release` in the project directory. It's best to then move the binary located in `./target/release/rzp` into `/usr/local/bin` (on *nix systems)
+Use the build in the releases or install the rust toolchain and run `cargo build --release` in the project directory. It's best to then move the binary located in `./target/release/rzp` into `/usr/local/bin` (on *nix systems)
